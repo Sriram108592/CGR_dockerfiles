@@ -1,0 +1,507 @@
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -c, --context string     Name of the context to use to connect to the daemon (overrides
+                           DOCKER_HOST env var and default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default
+                           "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  builder     Manage builds
+  config      Manage Docker configs
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+
+To get more help with docker, check out our guides at https://docs.docker.com/go/guides/
+
+
+
+
+->where it is installed in Docker then we called as Docker Host.
+
+
+container-images(docker hub)
+
+The life cycle of a Docker container consists of several stages:
+
+Create: A container is created using the docker run command, which creates a new container from a specified image.
+
+Start: The created container is started using the docker start command. The container is now running and can be accessed.
+
+Stop: The running container can be stopped using the docker stop command. The container is now in a stopped state and its process is no longer running, but the container's file system still exists.
+
+Restart: The stopped container can be restarted using the docker start command. The container's process is restarted, and the container is again in a running state.
+
+Kill: The running container can be killed using the docker kill command. This sends a signal to the container's process to stop, and the container is immediately stopped.
+
+Remove: The container can be removed using the docker rm command. This removes the container's file system and any data stored in it.
+
+Pause/Unpause: The running container can be paused and unpaused using the docker pause and docker unpause command respectively. This will stop the container's processes but leave the container in a running state and its file system still exists.
+
+
+ docker rm $(docker stop $(docker ps -a))
+
+docker run -itd ubuntu
+
+docker run -it --name=sabarivas --hostname=tomcat ubuntu
+
+
+ docker rm $(docker stop $(docker ps -aq)) -- 
+
+docker ps -aq -- To display the list of container Id's
+
+
+docker run -it dokken/centos-8 /bin/bash -- creating a centos container
+
+
+docker commit 5ccae4e5e020 vijaym231/java
+
+
+
+[root@dockerhost kishore]# docker volume create demo_vol
+demo_vol
+[root@dockerhost kishore]# docker volume ls
+DRIVER    VOLUME NAME
+local     demo_vol
+[root@dockerhost kishore]# docker volume inspect demo_vol
+[
+    {
+        "CreatedAt": "2023-01-29T10:42:00Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/demo_vol/_data",
+        "Name": "demo_vol",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+Mount point path:
+cd /var/lib/docker/volumes/
+
+It lists details of a volume, including its location on the host file (Mountpoint). Everything stored within the data volume can also be found in the directory listed under the mountpoint path.
+
+================
+docker run -v "$(pwd)":[volume_name] [docker_image]
+
+
+docker run -it -v "$(pwd)":/data1 ubuntu
+
+
+docker run -it -v $(pwd):/data1 ubuntu
+
+
+ docker run -it --name=masthan -v find_vol2:/tmp/data ubuntu
+
+docker volume rm demo_vol
+
+
+How to Delete All Volumes at Once
+To delete all unused Docker volumes with a single command:
+
+docker volume prune
+
+
+
+
+ What are Docker Volumes?
+Docker volumes are file systems mounted on Docker containers to preserve data generated by the running container.
+The volumes are stored on the host, independent of the container life cycle. This allows users to back up data and share file systems between containers easily.
+
+How to Create a Docker Volume
+To create a Docker Volume use the command:
+
+docker volume create [volume_name]
+It lists details of a volume, including its location on the host file (Mountpoint). Everything stored within the data volume can also be found in the directory listed under the mountpoint path.
+
+
+ docker run -v "$(pwd)":[volume_name] [docker_image]
+ 1. First, create a sample directory on the host under the name tmp and move into it:
+
+mkdir tmp
+
+cd tmp
+ 2. Once inside the directory, create a test file to see whether it will be available from the container:
+
+touch file.txt
+2. Then, use the docker run command to launch an Ubuntu container with the host directory attached to it:
+
+docker run -it -v "$(pwd)":/data1 ubuntu
+How to Delete All Volumes at Once
+To delete all unused Docker volumes with a single command:
+
+docker volume prune
+
+
+my sql docker container creation
+docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=mySchema mysql
+
+
+docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=mySchema mysql:5
+
+
+docker run -d --name mysql -p 3306:3306 -e MYSQL_DATABASE=mySchema mysql
+
+
+
+
+to change the password
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY '[newpassword]';
+
+
+
+ docker exec -it 99079dded97b bash
+
+
+
+docker attach containerid
+docker exec -it  containerid bash
+
+
+after login mysql
+
+mysql -uroot -p
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mySchema           |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+============================================
+Networking:
+
+docker network create --driver=bridge --subnet=192.168.0.0/16 br0(network name)
+
+
+docker network create \
+  --driver=bridge \
+  --subnet=172.28.0.0/16 \
+  --ip-range=172.28.5.0/24 \
+  --gateway=172.28.5.254 \
+  br0(Network name)
+
+
+
+DOCKER FILE:
+
+dockerfile---instruction---commands--ubuntu--apt update-y-----mkdir vijay---image tag
+
+
+
+FROM centos
+
+MAINTAINER hello@gritfy.com
+
+RUN mkdir /opt/tomcat/
+
+WORKDIR /opt/tomcat
+RUN curl -O https://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.40/bin/apache-tomcat-8.5.40.tar.gz
+RUN tar xvfz apache*.tar.gz
+RUN mv apache-tomcat-8.5.40/* /opt/tomcat/.
+RUN yum -y install java
+RUN java -version
+
+WORKDIR /opt/tomcat/webapps
+RUN curl -O -L https://github.com/AKSarav/SampleWebApp/raw/master/dist/SampleWebApp.war
+
+EXPOSE 8080
+
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]
+===========================================
+
+[root@dockerhost kishore]# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+[root@dockerhost kishore]# docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED         STATUS                     PORTS     NAMES
+7954c1228950   ubuntu    "bash"    9 minutes ago   Exited (0) 5 minutes ago             nice_curran
+[root@dockerhost kishore]# docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+ubuntu       latest    6b7dfa7e8fdb   7 weeks ago   77.8MB
+[root@dockerhost kishore]# docker run -it ubuntu
+root@9f1953541dbb:/# [root@dockerhost kishore]#
+[root@dockerhost kishore]# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED              STATUS              PORTS     NAMES
+9f1953541dbb   ubuntu    "bash"    About a minute ago   Up About a minute             heuristic_bartik
+[root@dockerhost kishore]# docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                      PORTS     NAMES
+9f1953541dbb   ubuntu    "bash"    2 minutes ago    Up 2 minutes                          heuristic_bartik
+7954c1228950   ubuntu    "bash"    14 minutes ago   Exited (0) 10 minutes ago             nice_curran
+[root@dockerhost kishore]#
+===================================================
+Dockerfile:
+
+FROM ubuntu -->Image
+
+
+
+
+FROM ubuntu:latest
+RUN apt-get update && apt-get -y install apache2
+COPY index.html /var/www/html/
+EXPOSE 80
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+
+
+
+
+write a html code for login page                                0FG30XTj^g/#NMO057C3.BMX*BS6@?_M
+--------------------------------
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    <form action="login.php" method="post">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password">
+      <br><br>
+      <input type="submit" value="Login">
+    </form> 
+  </body>
+</html>
+
+==================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+      }
+
+      form {
+        width: 30%;
+        background-color: #f2f2f2;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px #ccc;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: dodgerblue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: royalblue;
+      }
+
+      h1 {
+        margin-bottom: 30px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <form action="/login" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </body>
+</html>
+=============================================================
+Docker compose -->we can 
+
+Docker Compose is a tool for defining and running multi-container Docker applications.
+It allows you to define your application's services, networks and volumes in a single docker-compose.yml file,
+and then start and stop all services from this configuration using a single docker-compose command.
+It simplifies the management and coordination of multiple containers that make up a complex application,
+making it easier to develop, test, and deploy applications.
+
+
+mkdir -p ~/.docker/cli-plugins/
+curl -SL https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-linux-x86_64 -o ~/.docker/cli-plugins/docker-compose
+
+chmod +x ~/.docker/cli-plugins/docker-compose
+
+docker compose version
+
+
+#Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app-network
+
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-`uname -s`-`uname -m` | sudo tee /usr/local/bin/docker-compose > /dev/null
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+docker-compose --version
+
+
+
+wget https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)
+
+sudo mv docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
+
+sudo chmod -v +x /usr/local/bin/docker-compose
+
+docker-compose version
+
+
+curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+chmod +x /usr/local/bin/docker-compose
+
+
+curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+chmod +x /usr/local/bin/docker-compose
+
+
+
+DOCKER_COMPOSE_VERSION="1.23.2"
+sudo curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+
+=======================================
+Jenkins
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
