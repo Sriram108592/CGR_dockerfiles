@@ -1,0 +1,45 @@
+# Use the .NET SDK image to build the application (Chainguard's image)
+FROM cgr.dev/chainguard/dotnet-sdk:latest-dev AS build
+
+# Set the working directory for the build stage
+WORKDIR /source
+
+# Switch to root to set permissions
+USER root
+
+# Ensure that the /source directory and its subdirectories are owned by nonroot (UID 65532)
+RUN chown -R nonroot:nonroot /source
+
+# Switch to nonroot user for the build process
+USER nonroot
+
+# Copy the solution and project files into the container
+COPY HelloWorldApp.sln ./
+COPY source/HelloWorldApp.csproj ./HelloWorldApp/
+
+# Ensure proper ownership of the copied files
+RUN chown -R nonroot:nonroot /source
+
+# Restore the dependencies of the solution
+RUN dotnet restore HelloWorldApp.sln
+
+# Publish the application to a folder called /app/publish
+RUN dotnet publish HelloWorldApp.sln --configuration Release --output /app/publish
+
+# Use the .NET Runtime image for the final image (Chainguard's runtime image)
+FROM cgr.dev/chainguard/aspnet-runtime:latest-dev AS final
+
+# Set the working directory in the runtime container
+WORKDIR /app
+
+# Copy the published application from the build container
+COPY --from=build /app/publish .
+
+# Change ownership of the app directory to the nonroot user (UID 65532)
+RUN chown -R 65532:65532 /app
+
+# Set the user to run the application (nonroot user with UID 65532)
+USER 65532
+
+# Define the entry point for the container to run the app
+ENTRYPOINT ["dotnet", "HelloWorldApp.dll"]

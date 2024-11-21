@@ -1,0 +1,38 @@
+# Use a Red Hat Universal Base Image (UBI 8)
+FROM registry.access.redhat.com/ubi8/ubi
+
+ARG PYTHON_VERSION=3.8.17
+RUN adduser -r -m devops
+WORKDIR /app
+
+# Install dependencies using dnf (Red Hat-based)
+RUN dnf install -y \
+    wget \
+    gcc \
+    make \
+    zlib-devel \
+    libffi-devel \
+    openssl-devel \
+    glibc-devel \
+    && dnf clean all
+
+# Download and extract Python sources
+RUN wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz -P /opt/ \
+    && tar xzf /opt/Python-${PYTHON_VERSION}.tgz -C /opt/ \
+    && rm /opt/Python-${PYTHON_VERSION}.tgz
+
+# Build Python and clean up
+RUN cd /opt/Python-${PYTHON_VERSION} \
+    && ./configure --prefix=/usr --enable-optimizations --with-ensurepip=install \
+    && make install \
+    && rm -rf /opt/Python-${PYTHON_VERSION}
+
+# Copy requirements.txt and install pip packages
+COPY requirements.txt /app/
+RUN /usr/bin/python3 -m pip install --no-cache-dir --upgrade pip \
+    && /usr/bin/python3 -m pip install --no-cache-dir -r requirements.txt
+
+USER devops
+
+# Corrected ENTRYPOINT
+ENTRYPOINT ["/bin/bash"]

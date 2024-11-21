@@ -1,0 +1,14 @@
+F:\New folder\HelloWorldApp\bin\Debug\net9.0\HelloWorldApp.exe
+F:\New folder\HelloWorldApp\bin\Debug\net9.0\HelloWorldApp.deps.json
+F:\New folder\HelloWorldApp\bin\Debug\net9.0\HelloWorldApp.runtimeconfig.json
+F:\New folder\HelloWorldApp\bin\Debug\net9.0\HelloWorldApp.dll
+F:\New folder\HelloWorldApp\bin\Debug\net9.0\HelloWorldApp.pdb
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.GeneratedMSBuildEditorConfig.editorconfig
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.AssemblyInfoInputs.cache
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.AssemblyInfo.cs
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.csproj.CoreCompileInputs.cache
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.dll
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\refint\HelloWorldApp.dll
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.pdb
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\HelloWorldApp.genruntimeconfig.cache
+F:\New folder\HelloWorldApp\obj\Debug\net9.0\ref\HelloWorldApp.dll
