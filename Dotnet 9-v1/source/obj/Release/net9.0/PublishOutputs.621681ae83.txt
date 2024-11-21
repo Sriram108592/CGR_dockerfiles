@@ -1,0 +1,5 @@
+F:\New folder\source\bin\Release\net9.0\publish\HelloWorldApp.exe
+F:\New folder\source\bin\Release\net9.0\publish\HelloWorldApp.dll
+F:\New folder\source\bin\Release\net9.0\publish\HelloWorldApp.deps.json
+F:\New folder\source\bin\Release\net9.0\publish\HelloWorldApp.runtimeconfig.json
+F:\New folder\source\bin\Release\net9.0\publish\HelloWorldApp.pdb
